@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samwel Matunda | Engineering Portfolio</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #38bdf8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        nav {
+            background: #1e293b;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 2px solid var(--primary);
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        nav button.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .tab-content { display: none; }
+        .active-content { display: block; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            background: var(--card);
+            border-radius: 8px;
+            border: 1px solid #334155;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .photo-card img { width: 100%; height: 200px; object-fit: cover; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .cv-section {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px dashed var(--primary);
+            margin-top: 2rem;
+        }
+
+        footer { text-align: center; padding: 2rem; margin-top: 4rem; background: #0b1120; }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--bg);
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn:hover { background: white; transform: scale(1.05); }
+
+        .contact-list { list-style: none; padding: 0; font-size: 1.2rem; }
+        .contact-list li { margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <button class="active" onclick="openTab(event, 'home')">Home</button>
+        <button onclick="openTab(event, 'projects')">Projects</button>
+        <button onclick="openTab(event, 'contact')">Contact & CV</button>
+    </nav>
+
+    <header>
+        <h1>Samwel Matunda Nyagaka</h1>
+        <p style="color: var(--accent)">Electrical Engineering Student | Chuka University</p>
+    </header>
+
+    <div class="container">
+
+        <div id="home" class="tab-content active-content">
+            <h2>About Me</h2>
+            <p>I am a dedicated Electrical Engineering student at Chuka University. My focus is on <strong>Power Systems</strong>—understanding how we can efficiently generate and transmit power across the grid. I also have a strong foundation in physical electronics and circuit troubleshooting.</p>
+            
+            <h3>Engineering Practicals</h3>
+            <div class="photo-gallery">
+                <div class="photo-card">
+                    <img src="practical1.jpg" alt="Practical Session 1">
+                    <p style="padding: 5px; font-size: 0.8rem;">Testing BJT Switching Circuits</p>
+                </div>
+                <div class="photo-card">
+                    <img src="practical2.jpg" alt="Practical Session 2">
+                    <p style="padding: 5px; font-size: 0.8rem;">Power System Simulation Lab</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="projects" class="tab-content">
+            <h2>My Engineering Projects</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Automated Lighting Controller</h3>
+                    <p>Designed a system using LDR sensors and BJT transistors to automate street lighting, aiming for energy efficiency in urban areas.</p>
+                </div>
+                <div class="card">
+                    <h3>Smart Energy Meter</h3>
+                    <p>An IoT project using ESP32 to track voltage and current consumption, helping users monitor electricity costs in real-time.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="contact" class="tab-content">
+            <h2>Connect With Me</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Contact Details</h3>
+                    <ul class="contact-list">
+                        <li>📧 <strong>Email:</strong> samuelnyagaka98@gmail.com</li>
+                        <li>📞 <strong>Phone:</strong> +254 XXX XXX XXX</li>
+                        <li>📍 <strong>Location:</strong> Chuka / Nairobi, Kenya</li>
+                    </ul>
+                </div>
+                
+                <div class="cv-section">
+                    <h3>Curriculum Vitae</h3>
+                    <p>Interested in my full academic and professional background?</p>
+                    <a href="Samwel_CV.pdf" download class="btn">⬇️ Download My CV (PDF)</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Samwel Matunda Nyagaka</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByTagName("button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+</body>
+</html>

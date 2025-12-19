@@ -65,7 +65,6 @@
             transform: translateX(-50%);
         }
 
-        /* Header with Profile Pic */
         header {
             padding: 5rem 1rem;
             background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
@@ -92,26 +91,17 @@
             border: 3px solid var(--primary);
             overflow: hidden;
             box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+            cursor: pointer;
         }
 
-        .profile-pic-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .profile-pic-container img { width: 100%; height: 100%; object-fit: cover; }
 
         .header-text { text-align: left; }
         h1 { font-size: 2.5rem; margin: 0; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { font-size: 1.1rem; color: var(--accent); margin-top: 5px; font-weight: 300; }
 
-        @media (max-width: 650px) {
-            .header-main { flex-direction: column; text-align: center; }
-            .header-text { text-align: center; }
-        }
-
         .container { max-width: 1100px; margin: auto; padding: 2rem; }
 
-        /* Tabbing System */
         .tab-content { display: none; }
         .active-content { display: block; animation: fadeInUp 0.6s ease forwards; }
 
@@ -120,7 +110,82 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Home/Summary Card */
+        /* Practical Gallery Grid */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            transition: 0.5s;
+        }
+
+        .gallery-item {
+            position: relative;
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-image: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.9)), url('background.png'); 
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        /* Focused Practical State */
+        .gallery-item.focused {
+            grid-column: 1 / -1;
+            z-index: 10;
+            cursor: default;
+        }
+
+        .circular-frame {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px auto;
+            border: 4px solid var(--primary);
+            flex-shrink: 0;
+        }
+
+        .circular-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Lightbox (Image Viewer) */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img { max-width: 90%; max-height: 80%; border: 3px solid var(--primary); border-radius: 10px; }
+
+        .close-btn {
+            position: absolute;
+            top: 20px; right: 30px;
+            color: white; font-size: 40px; font-weight: bold; cursor: pointer;
+        }
+
+        .back-btn {
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .glass-card {
             background: var(--card);
             backdrop-filter: blur(12px);
@@ -130,65 +195,7 @@
             margin-bottom: 2rem;
         }
 
-        /* Skills Badges */
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 1.5rem;
-        }
-
-        .skill-badge {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            color: var(--text);
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            transition: 0.3s;
-        }
-
-        .skill-badge:hover {
-            background: var(--primary);
-            color: var(--bg);
-            transform: translateY(-3px);
-        }
-
-        /* Practical Gallery Items */
-        .photo-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-        }
-
-        .gallery-item {
-            text-align: center;
-            background: var(--card);
-            padding: 2rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: 0.3s ease;
-        }
-
-        .gallery-item:hover { border-color: var(--primary); transform: translateY(-5px); }
-
-        .circular-frame {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 20px auto;
-            border: 4px solid var(--primary);
-        }
-
-        .circular-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* General Grid for Projects/Contact */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
 
         .btn {
             display: inline-block;
@@ -213,14 +220,19 @@
         <button onclick="openTab(event, 'contact')">Contact & CV</button>
     </nav>
 
+    <div id="lightbox" onclick="this.style.display='none'">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
     <header>
         <div class="header-main">
-            <div class="profile-pic-container">
-                <img src="profile.jpg" alt="Samwel Matunda Nyagaka">
+            <div class="profile-pic-container" onclick="viewImage('profile.jpeg')">
+                <img src="profile.jpeg" alt="Samwel Matunda Nyagaka">
             </div>
             <div class="header-text">
                 <h1>Samwel Matunda Nyagaka</h1>
-                <p class="subtitle">Electrical Engineering Student | Chuka University</p>
+                <p class="subtitle">Electrical & Electronics Engineering Student | Chuka University</p>
                 <p style="opacity: 0.8;">Specializing in Power Systems & Advanced Electronics</p>
             </div>
         </div>
@@ -229,97 +241,117 @@
     <div class="container">
 
         <div id="home" class="tab-content active-content">
-            <h2 style="color: var(--primary)">Professional Summary</h2>
+            <h2 style="color: var(--primary)">About Me</h2>
             <div class="glass-card">
-                <p>I am a detail-oriented Electrical Engineering student at <strong>Chuka University</strong> in Kenya. My core focus is on <strong>Power Systems</strong>—specifically power generation, transmission, and consumption. I am passionate about applying <strong>Physical Electronics</strong> to solve real-world automation challenges.</p>
+                <p>I am a detail-oriented Electrical & Electronics Engineering student at <strong>Chuka University</strong>. I focus on Power Systems and Physical Electronics to solve real-world automation challenges.</p>
             </div>
-
             <h2 style="color: var(--primary); margin-top: 2rem;">Technical Toolkit</h2>
-            <div class="skills-grid">
-                <div class="skill-badge">⚙️ MATLAB / Simulink</div>
-                <div class="skill-badge">🔌 Proteus / KiCad</div>
-                <div class="skill-badge">💻 Arduino C++</div>
-                <div class="skill-badge">⚡ Power Systems Design</div>
-                <div class="skill-badge">🏢 Domestic Installations</div>
-                <div class="skill-badge">📉 BJT Theory</div>
+            <div class="skills-grid" style="display:flex; flex-wrap:wrap; gap:10px;">
+                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚙️ AUTOCAD</span>
+                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">🔌 Proteus</span>
+                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">💻 Arduino</span>
+                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚡ Power Systems</span>
             </div>
         </div>
 
         <div id="practicals" class="tab-content">
-            <h2 style="color: var(--primary); text-align: center;">Practical Session Gallery</h2>
-            <div class="photo-gallery">
-                <div class="gallery-item">
-                    <div class="circular-frame">
-                        <img src="practical1.jpg" alt="Lab Work">
+            <h2 id="gallery-title" style="color: var(--primary); text-align: center; margin-bottom: 2rem;">Practical Session Gallery</h2>
+            <center><button id="back-to-gallery" class="back-btn" onclick="resetGallery()">← Back to All Practicals</button></center>
+            
+            <div class="photo-gallery" id="main-gallery">
+                
+                <div class="gallery-item" onclick="focusPractical(this)">
+                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical1.jpeg')">
+                        <img src="practical1.jpeg" alt="Intermediate Switching">
                     </div>
-                    <strong>BJT Switching Logic</strong>
-                    <p style="font-size: 0.9rem; color: #cbd5e1; font-style: italic; margin-top: 10px;">
-                        Experimental analysis of switching logic using Bipolar Junction Transistors for automated control.
+                    <strong style="color: var(--primary);">1. INTERMEDIATE SWITCHING</strong>
+                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                        Did a practical aimed to understanding how an intermediate switch operates allowing control of a set of luminaires from three different points independently. An application being in long corridors lighting control. It as well equipped me with the knowledge of surface wiring using clips and PVC twin sheathed cables applied in offices and commercial areas where safety is not a risk and for neatness.
                     </p>
                 </div>
+
+                <div class="gallery-item" onclick="focusPractical(this)">
+                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical2.jpeg')">
+                        <img src="practical2.jpeg" alt="Two-Way Switching">
+                    </div>
+                    <strong style="color: var(--primary);">2. ONE GANG TWO-WAY SWITCHING</strong>
+                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                        This practical equipped me with the knowledge on how two way switching using a one gang two way switches functions by switching on or off a set of lighting points from two different positions. An application of this is in the staircases, in bedrooms and even living rooms e.t.c. The practical demonstrated the importance of connecting lighting points in parallel rather than in series since in parallel connection each bulb receive full voltage thus all bulbs are brighter whereas in series the bulbs split and share voltage among them leading to reduced brightness.
+                    </p>
+                </div>
+
+                <div class="gallery-item" onclick="focusPractical(this)">
+                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical3.jpeg')">
+                        <img src="practical3.jpeg" alt="Ring Main Circuit">
+                    </div>
+                    <strong style="color: var(--primary);">3. RING MAIN CIRCUIT AND METERING</strong>
+                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                        This practical helped understand how a ring main circuit for sockets works, correct cable sizing for different circuits by calculating the load i.e 2.5 mm² for socket outlets, 1.5 mm² for lighting points, 4.0 mm² for water heater e.t.c. As well I learnt how to use the PVC conduits for conduit wiring for enhanced safety, connecting fluorescent tube lamp, choosing the appropriate protective devices (MCBs) for different circuits by calculating the load, performing the major tests on an installation before connecting it to the mains power supply including the polarity test, insulation resistance test, continuity test, earthing test and visual inspection. Finally I learnt how to use the energy meter to cost the energy consumed by consumers.
+                    </p>
+                </div>
+
             </div>
         </div>
 
         <div id="projects" class="tab-content">
-            <h2 style="color: var(--primary)">Key Engineering Projects</h2>
-            <div class="grid">
-                <div class="glass-card">
-                    <h3>Automated Lighting Controller</h3>
-                    <p>Sensor-based system using BJT logic to reduce residential power waste.</p>
-                </div>
-                <div class="glass-card">
-                    <h3>Smart Energy Meter</h3>
-                    <p>ESP32 prototype for real-time domestic energy monitoring.</p>
-                </div>
+            <h2 style="color: var(--primary)">Key Projects</h2>
+            <div class="glass-card">
+                <h3>Automated Lighting Controller</h3>
+                <p> Currently working on a Sensor-based system using BJT logic to reduce residential power waste.</p>
             </div>
         </div>
 
         <div id="contact" class="tab-content">
             <h2 style="color: var(--primary)">Contact & CV</h2>
-            <div class="grid">
-                <div class="glass-card">
-                    <p>📧 <strong>Email:</strong> samuelnyagaka98@gmail.com</p>
-                    <p>📞 <strong>Phone:</strong> +254 748588787</p>
-                    <p>📍 <strong>Location:</strong> Chuka University / Nairobi, Kenya</p>
-                </div>
-                <div class="glass-card" style="text-align: center;">
-                    <h3>Official Resume</h3>
-                    <p>Download my full technical CV for my academic history.</p>
-                    <br>
-                    <a href="Samwel_CV.pdf" download class="btn">⬇️ Download CV (PDF)</a>
-                </div>
+            <div class="glass-card">
+                <p>📧 Email: samuelnyagaka98@gmail.com</p>
+                <p>📞 Phone: +254 748588787</p>
+                <p>📍 Location: Chuka / Nairobi, Kenya</p>
+                <br>
+                <a href="Samwel_CV.pdf" download class="btn">⬇️ Download CV (PDF)</a>
             </div>
         </div>
-
     </div>
 
-    <footer>
-        <p>&copy; 2025 Samwel Matunda Nyagaka | Electrical Engineering Portfolio</p>
-    </footer>
+    <footer><p>&copy; 2025 Samwel Matunda Nyagaka</p></footer>
 
     <script>
+        // Tab switching logic
         function openTab(evt, tabName) {
-            // 1. Find all tab contents and hide them
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].classList.remove("active-content");
-            }
-
-            // 2. Find all navigation buttons and remove 'active' status
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active-content"); }
             tablinks = document.getElementsByTagName("button");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
-
-            // 3. Show the specific tab clicked and make the button look active
+            for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
             document.getElementById(tabName).classList.add("active-content");
             evt.currentTarget.classList.add("active");
+            resetGallery(); // Reset practicals if switching tabs
+        }
 
-            // 4. Smoothly scroll back to top of the new tab
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Image Viewer Logic
+        function viewImage(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        // Practical Focus Logic
+        function focusPractical(element) {
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => { if(item !== element) item.style.display = 'none'; });
+            element.classList.add('focused');
+            document.getElementById('back-to-gallery').style.display = 'block';
+            document.getElementById('gallery-title').innerText = "Detail: " + element.querySelector('strong').innerText;
+        }
+
+        function resetGallery() {
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                item.style.display = 'flex';
+                item.classList.remove('focused');
+            });
+            document.getElementById('back-to-gallery').style.display = 'none';
+            document.getElementById('gallery-title').innerText = "Practical Session Gallery";
         }
     </script>
-
 </body>
 </html>

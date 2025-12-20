@@ -275,6 +275,12 @@
             text-decoration: none;
             font-weight: bold;
             transition: 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary);
         }
 
         footer { text-align: center; padding: 2rem; opacity: 0.5; font-size: 0.8rem; margin-top: auto; }
@@ -290,35 +296,31 @@
                 border-right: none;
                 border-bottom: 1px solid rgba(0, 212, 255, 0.3);
                 padding: 10px;
-                /* Note: We keep flex-direction: column for NAV to stack header above buttons */
             }
 
             .nav-header { margin-bottom: 0px; padding: 10px; } 
 
-            /* This handles the HORIZONTAL buttons on mobile */
             #nav-links-container {
-                flex-direction: row; /* Horizontal direction */
-                flex-wrap: wrap; /* Wrap if screen is too small */
-                justify-content: center; /* Center the buttons */
-                gap: 5px; /* Smaller gap */
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                justify-content: center; 
+                gap: 5px; 
                 margin-top: 10px;
             }
 
             .main-content { margin-left: 0; width: 100%; }
             
-            /* Adjust buttons for horizontal layout */
             nav button { 
                 padding: 8px 15px; 
                 font-size: 0.8rem; 
                 text-align: center;
-                background: rgba(255,255,255,0.05); /* Slight bg to make them look like chips */
+                background: rgba(255,255,255,0.05); 
                 border-radius: 20px;
             }
 
-            nav button:hover { padding-left: 15px; } /* Disable slide effect */
+            nav button:hover { padding-left: 15px; } 
             
-            /* Adjust active indicator for horizontal layout */
-            nav button.active::after { display: none; } /* Remove side bar */
+            nav button.active::after { display: none; } 
             nav button.active { 
                 background: var(--primary); 
                 color: var(--bg);
@@ -432,7 +434,7 @@
                     <p>📞 Phone: +254 748588787</p>
                     <p>📍 Location: Chuka / Nairobi, Kenya</p>
                     <br>
-                    <a href="Samwel_CV.pdf" download class="btn">⬇️ Download CV (PDF)</a>
+                    <a href="./Samwel_CV.pdf" download="Samwel_CV.pdf" target="_blank" class="btn">⬇️ Download CV (PDF)</a>
                 </div>
             </div>
         </div>
@@ -446,15 +448,13 @@
             const container = document.getElementById("nav-links-container");
             const arrow = document.getElementById("arrow");
             
-            // Check current display state
-            // Note: We use computed style because css hides/shows it differently
             const currentDisplay = window.getComputedStyle(container).display;
 
             if (currentDisplay === "none") {
-                container.style.display = "flex"; // Show
+                container.style.display = "flex"; 
                 arrow.style.transform = "rotate(0deg)"; 
             } else {
-                container.style.display = "none"; // Hide
+                container.style.display = "none"; 
                 arrow.style.transform = "rotate(-90deg)"; 
             }
         }

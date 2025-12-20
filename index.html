@@ -26,7 +26,7 @@
             display: flex;
         }
 
-        /* --- NAVIGATION (SIDEBAR) --- */
+        /* --- NAVIGATION (SIDEBAR - PC DEFAULT) --- */
         nav {
             background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(15px);
@@ -42,14 +42,14 @@
             justify-content: flex-start;
             border-right: 1px solid rgba(0, 212, 255, 0.3);
             box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-            transition: width 0.3s ease; /* Smooth transition for sidebar width if needed */
+            transition: width 0.3s ease;
         }
 
-        /* Styling the Options Header to look clickable */
+        /* Styling the Options Header */
         .nav-header {
             cursor: pointer;
             margin-bottom: 2rem;
-            user-select: none; /* Prevents highlighting text on double click */
+            user-select: none;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -65,23 +65,19 @@
             margin: 0;
         }
 
-        .nav-header:hover h3 {
-            color: white;
-        }
-
         .arrow-icon {
             font-size: 0.8rem;
             color: var(--primary);
             transition: transform 0.3s ease;
         }
 
-        /* Container for the buttons to be toggled */
+        /* Container for the buttons */
         #nav-links-container {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Vertical on PC */
             gap: 20px;
-            overflow: hidden; /* Ensures content doesn't spill when hiding */
-            transition: all 0.3s ease; /* Smooth toggle effect */
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         nav button {
@@ -98,7 +94,7 @@
             position: relative;
             text-align: left;
             border-radius: 8px;
-            white-space: nowrap; /* Prevents text wrap */
+            white-space: nowrap;
         }
 
         nav button:hover {
@@ -283,23 +279,50 @@
 
         footer { text-align: center; padding: 2rem; opacity: 0.5; font-size: 0.8rem; margin-top: auto; }
 
+        /* --- MOBILE RESPONSIVE STYLES --- */
         @media (max-width: 768px) {
             body { display: block; }
+            
             nav { 
                 width: 100%; 
                 height: auto; 
                 position: sticky; 
-                flex-direction: column; /* Stack for the dropdown effect */
-                justify-content: center; 
                 border-right: none;
                 border-bottom: 1px solid rgba(0, 212, 255, 0.3);
                 padding: 10px;
+                /* Note: We keep flex-direction: column for NAV to stack header above buttons */
             }
-            .nav-header { margin-bottom: 10px; } /* Adjust spacing for mobile */
+
+            .nav-header { margin-bottom: 0px; padding: 10px; } 
+
+            /* This handles the HORIZONTAL buttons on mobile */
+            #nav-links-container {
+                flex-direction: row; /* Horizontal direction */
+                flex-wrap: wrap; /* Wrap if screen is too small */
+                justify-content: center; /* Center the buttons */
+                gap: 5px; /* Smaller gap */
+                margin-top: 10px;
+            }
+
             .main-content { margin-left: 0; width: 100%; }
-            nav button { padding: 10px; font-size: 0.8rem; }
-            nav button:hover { padding-left: 10px; }
-            nav button.active::after { width: 100%; height: 2px; left: 0; top: auto; bottom: 0; transform: none; }
+            
+            /* Adjust buttons for horizontal layout */
+            nav button { 
+                padding: 8px 15px; 
+                font-size: 0.8rem; 
+                text-align: center;
+                background: rgba(255,255,255,0.05); /* Slight bg to make them look like chips */
+                border-radius: 20px;
+            }
+
+            nav button:hover { padding-left: 15px; } /* Disable slide effect */
+            
+            /* Adjust active indicator for horizontal layout */
+            nav button.active::after { display: none; } /* Remove side bar */
+            nav button.active { 
+                background: var(--primary); 
+                color: var(--bg);
+            }
         }
     </style>
 </head>
@@ -424,12 +447,15 @@
             const arrow = document.getElementById("arrow");
             
             // Check current display state
-            if (container.style.display === "none") {
+            // Note: We use computed style because css hides/shows it differently
+            const currentDisplay = window.getComputedStyle(container).display;
+
+            if (currentDisplay === "none") {
                 container.style.display = "flex"; // Show
-                arrow.style.transform = "rotate(0deg)"; // Reset arrow
+                arrow.style.transform = "rotate(0deg)"; 
             } else {
                 container.style.display = "none"; // Hide
-                arrow.style.transform = "rotate(-90deg)"; // Rotate arrow to indicate closed
+                arrow.style.transform = "rotate(-90deg)"; 
             }
         }
 
@@ -442,7 +468,7 @@
             for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
             document.getElementById(tabName).classList.add("active-content");
             evt.currentTarget.classList.add("active");
-            resetGallery(); // Reset practicals if switching tabs
+            resetGallery(); 
         }
 
         // Image Viewer Logic

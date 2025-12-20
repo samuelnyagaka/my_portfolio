@@ -11,6 +11,7 @@
             --card: rgba(30, 41, 59, 0.6);
             --text: #f8fafc;
             --accent: #38bdf8;
+            --sidebar-width: 260px;
         }
 
         * { box-sizing: border-box; }
@@ -22,47 +23,112 @@
             margin: 0;
             line-height: 1.6;
             overflow-x: hidden;
+            display: flex;
         }
 
-        /* Navigation Bar */
+        /* --- NAVIGATION (SIDEBAR) --- */
         nav {
-            background: rgba(39, 72, 148, 0.8);
+            background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(15px);
-            padding: 1rem;
-            position: sticky;
+            padding: 2rem 1rem;
+            position: fixed;
+            left: 0;
             top: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
             z-index: 1000;
             display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            border-right: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            transition: width 0.3s ease; /* Smooth transition for sidebar width if needed */
+        }
+
+        /* Styling the Options Header to look clickable */
+        .nav-header {
+            cursor: pointer;
+            margin-bottom: 2rem;
+            user-select: none; /* Prevents highlighting text on double click */
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
-            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-header h3 {
+            text-align: center;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .nav-header:hover h3 {
+            color: white;
+        }
+
+        .arrow-icon {
+            font-size: 0.8rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        /* Container for the buttons to be toggled */
+        #nav-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden; /* Ensures content doesn't spill when hiding */
+            transition: all 0.3s ease; /* Smooth toggle effect */
         }
 
         nav button {
             background: none;
             border: none;
-            color: white;
-            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
             cursor: pointer;
-            padding: 10px 12px;
+            padding: 15px 20px;
             transition: 0.3s;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
             position: relative;
+            text-align: left;
+            border-radius: 8px;
+            white-space: nowrap; /* Prevents text wrap */
         }
 
-        nav button.active { color: var(--primary); }
+        nav button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            padding-left: 25px;
+        }
+
+        nav button.active { 
+            color: var(--primary); 
+            background: rgba(0, 212, 255, 0.1); 
+        }
+        
         nav button.active::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 80%;
-            height: 2px;
+            left: 0;
+            top: 50%;
+            width: 4px;
+            height: 60%;
             background: var(--primary);
-            transform: translateX(-50%);
+            transform: translateY(-50%);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
@@ -98,22 +164,19 @@
 
         .header-text { text-align: left; }
         
-        /* --- UPDATED NAME STYLING HERE --- */
         h1 { 
             font-size: 2.5rem; 
             margin: 0; 
-            /* Mixture of Cyan, Electric Purple, and Warm Orange/Gold */
             background: linear-gradient(90deg, #00d4ff, #e879f9, #fbbf24); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
-            font-weight: 800; /* Increased weight for visibility */
+            font-weight: 800; 
             letter-spacing: -1px;
         }
-        /* ---------------------------------- */
 
         .subtitle { font-size: 1.1rem; color: var(--accent); margin-top: 5px; font-weight: 300; }
 
-        .container { max-width: 1100px; margin: auto; padding: 2rem; }
+        .container { max-width: 1100px; margin: auto; padding: 2rem; flex-grow: 1; width: 100%; }
 
         .tab-content { display: none; }
         .active-content { display: block; animation: fadeInUp 0.6s ease forwards; }
@@ -149,7 +212,6 @@
 
         .gallery-item:hover { border-color: var(--primary); transform: translateY(-5px); }
 
-        /* Focused Practical State */
         .gallery-item.focused {
             grid-column: 1 / -1;
             z-index: 10;
@@ -168,7 +230,7 @@
 
         .circular-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Lightbox (Image Viewer) */
+        /* Lightbox */
         #lightbox {
             display: none;
             position: fixed;
@@ -208,8 +270,6 @@
             margin-bottom: 2rem;
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-
         .btn {
             display: inline-block;
             background: linear-gradient(45deg, var(--primary), var(--accent));
@@ -221,114 +281,158 @@
             transition: 0.3s;
         }
 
-        footer { text-align: center; padding: 4rem; opacity: 0.5; font-size: 0.8rem; }
+        footer { text-align: center; padding: 2rem; opacity: 0.5; font-size: 0.8rem; margin-top: auto; }
+
+        @media (max-width: 768px) {
+            body { display: block; }
+            nav { 
+                width: 100%; 
+                height: auto; 
+                position: sticky; 
+                flex-direction: column; /* Stack for the dropdown effect */
+                justify-content: center; 
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+                padding: 10px;
+            }
+            .nav-header { margin-bottom: 10px; } /* Adjust spacing for mobile */
+            .main-content { margin-left: 0; width: 100%; }
+            nav button { padding: 10px; font-size: 0.8rem; }
+            nav button:hover { padding-left: 10px; }
+            nav button.active::after { width: 100%; height: 2px; left: 0; top: auto; bottom: 0; transform: none; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <button class="active" onclick="openTab(event, 'home')">Home</button>
-        <button onclick="openTab(event, 'practicals')">Practical Sessions</button>
-        <button onclick="openTab(event, 'projects')">Projects</button>
-        <button onclick="openTab(event, 'contact')">Contact & CV</button>
+        <div class="nav-header" onclick="toggleOptions()">
+            <h3>Options</h3>
+            <span id="arrow" class="arrow-icon">▼</span>
+        </div>
+        
+        <div id="nav-links-container">
+            <button class="active" onclick="openTab(event, 'home')">Home</button>
+            <button onclick="openTab(event, 'practicals')">Practical Sessions</button>
+            <button onclick="openTab(event, 'projects')">Projects</button>
+            <button onclick="openTab(event, 'contact')">Contact & CV</button>
+        </div>
     </nav>
 
-    <div id="lightbox" onclick="this.style.display='none'">
-        <span class="close-btn">&times;</span>
-        <img id="lightbox-img" src="">
-    </div>
-
-    <header>
-        <div class="header-main">
-            <div class="profile-pic-container" onclick="viewImage('profile.jpeg')">
-                <img src="profile.jpeg" alt="Samwel Matunda Nyagaka">
-            </div>
-            <div class="header-text">
-                <h1>Samwel Matunda Nyagaka</h1>
-                <p class="subtitle">Electrical & Electronics Engineering Student | Chuka University</p>
-                <p style="opacity: 0.8;">Specializing in Power Systems & Advanced Electronics</p>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-
-        <div id="home" class="tab-content active-content">
-            <h2 style="color: var(--primary)">About Me</h2>
-            <div class="glass-card">
-                <p>I am a detail-oriented Electrical & Electronics Engineering student at <strong>Chuka University</strong>. I focus on Power Systems and Physical Electronics to solve real-world automation challenges.</p>
-            </div>
-            <h2 style="color: var(--primary); margin-top: 2rem;">Technical Toolkit</h2>
-            <div class="skills-grid" style="display:flex; flex-wrap:wrap; gap:10px;">
-                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚙️ AUTOCAD</span>
-                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">🔌 Proteus</span>
-                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">💻 Arduino</span>
-                <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚡ Power Systems</span>
-            </div>
+    <div class="main-content">
+        
+        <div id="lightbox" onclick="this.style.display='none'">
+            <span class="close-btn">&times;</span>
+            <img id="lightbox-img" src="">
         </div>
 
-        <div id="practicals" class="tab-content">
-            <h2 id="gallery-title" style="color: var(--primary); text-align: center; margin-bottom: 2rem;">Practical Session Gallery</h2>
-            <center><button id="back-to-gallery" class="back-btn" onclick="resetGallery()">← Back to All Practicals</button></center>
-            
-            <div class="photo-gallery" id="main-gallery">
+        <header>
+            <div class="header-main">
+                <div class="profile-pic-container" onclick="viewImage('profile.jpeg')">
+                    <img src="profile.jpeg" alt="Samwel Matunda Nyagaka">
+                </div>
+                <div class="header-text">
+                    <h1>Samwel Matunda Nyagaka</h1>
+                    <p class="subtitle">Electrical & Electronics Engineering Student | Chuka University</p>
+                    <p style="opacity: 0.8;">Specializing in Power Systems & Advanced Electronics</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <div id="home" class="tab-content active-content">
+                <h2 style="color: var(--primary)">About Me</h2>
+                <div class="glass-card">
+                    <p>I am a detail-oriented Electrical & Electronics Engineering student at <strong>Chuka University</strong>. I focus on Power Systems and Physical Electronics to solve real-world automation challenges.</p>
+                </div>
+                <h2 style="color: var(--primary); margin-top: 2rem;">Technical Toolkit</h2>
+                <div class="skills-grid" style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚙️ AUTOCAD</span>
+                    <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">🔌 Proteus</span>
+                    <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">💻 Arduino</span>
+                    <span class="skill-badge" style="padding:8px 15px; border:1px solid var(--primary); border-radius:10px;">⚡ Power Systems</span>
+                </div>
+            </div>
+
+            <div id="practicals" class="tab-content">
+                <h2 id="gallery-title" style="color: var(--primary); text-align: center; margin-bottom: 2rem;">Practical Session Gallery</h2>
+                <center><button id="back-to-gallery" class="back-btn" onclick="resetGallery()">← Back to All Practicals</button></center>
                 
-                <div class="gallery-item" onclick="focusPractical(this)">
-                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical1.jpeg')">
-                        <img src="practical1.jpeg" alt="Intermediate Switching">
+                <div class="photo-gallery" id="main-gallery">
+                    
+                    <div class="gallery-item" onclick="focusPractical(this)">
+                        <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical1.jpeg')">
+                            <img src="practical1.jpeg" alt="Intermediate Switching">
+                        </div>
+                        <strong style="color: var(--primary);">1. INTERMEDIATE SWITCHING</strong>
+                        <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                            Did a practical aimed to understanding how an intermediate switch operates allowing control of a set of luminaires from three different points independently. An application being in long corridors lighting control. It as well equipped me with the knowledge of surface wiring using clips and PVC twin sheathed cables applied in offices and commercial areas where safety is not a risk and for neatness.
+                        </p>
                     </div>
-                    <strong style="color: var(--primary);">1. INTERMEDIATE SWITCHING</strong>
-                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
-                        Did a practical aimed to understanding how an intermediate switch operates allowing control of a set of luminaires from three different points independently. An application being in long corridors lighting control. It as well equipped me with the knowledge of surface wiring using clips and PVC twin sheathed cables applied in offices and commercial areas where safety is not a risk and for neatness.
-                    </p>
-                </div>
 
-                <div class="gallery-item" onclick="focusPractical(this)">
-                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical2.jpeg')">
-                        <img src="practical2.jpeg" alt="Two-Way Switching">
+                    <div class="gallery-item" onclick="focusPractical(this)">
+                        <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical2.jpeg')">
+                            <img src="practical2.jpeg" alt="Two-Way Switching">
+                        </div>
+                        <strong style="color: var(--primary);">2. ONE GANG TWO-WAY SWITCHING</strong>
+                        <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                            This practical equipped me with the knowledge on how two way switching using a one gang two way switches functions by switching on or off a set of lighting points from two different positions. An application of this is in the staircases, in bedrooms and even living rooms e.t.c. The practical demonstrated the importance of connecting lighting points in parallel rather than in series since in parallel connection each bulb receive full voltage thus all bulbs are brighter whereas in series the bulbs split and share voltage among them leading to reduced brightness.
+                        </p>
                     </div>
-                    <strong style="color: var(--primary);">2. ONE GANG TWO-WAY SWITCHING</strong>
-                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
-                        This practical equipped me with the knowledge on how two way switching using a one gang two way switches functions by switching on or off a set of lighting points from two different positions. An application of this is in the staircases, in bedrooms and even living rooms e.t.c. The practical demonstrated the importance of connecting lighting points in parallel rather than in series since in parallel connection each bulb receive full voltage thus all bulbs are brighter whereas in series the bulbs split and share voltage among them leading to reduced brightness.
-                    </p>
-                </div>
 
-                <div class="gallery-item" onclick="focusPractical(this)">
-                    <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical3.jpeg')">
-                        <img src="practical3.jpeg" alt="Ring Main Circuit">
+                    <div class="gallery-item" onclick="focusPractical(this)">
+                        <div class="circular-frame" onclick="event.stopPropagation(); viewImage('practical3.jpeg')">
+                            <img src="practical3.jpeg" alt="Ring Main Circuit">
+                        </div>
+                        <strong style="color: var(--primary);">3. RING MAIN CIRCUIT AND METERING</strong>
+                        <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
+                            This practical helped understand how a ring main circuit for sockets works, correct cable sizing for different circuits by calculating the load i.e 2.5 mm² for socket outlets, 1.5 mm² for lighting points, 4.0 mm² for water heater e.t.c. As well I learnt how to use the PVC conduits for conduit wiring for enhanced safety, connecting fluorescent tube lamp, choosing the appropriate protective devices (MCBs) for different circuits by calculating the load, performing the major tests on an installation before connecting it to the mains power supply including the polarity test, insulation resistance test, continuity test, earthing test and visual inspection. Finally I learnt how to use the energy meter to cost the energy consumed by consumers.
+                        </p>
                     </div>
-                    <strong style="color: var(--primary);">3. RING MAIN CIRCUIT AND METERING</strong>
-                    <p style="font-size: 0.85rem; color: #f8fafc; font-style: italic; margin-top: 10px; text-align: left;">
-                        This practical helped understand how a ring main circuit for sockets works, correct cable sizing for different circuits by calculating the load i.e 2.5 mm² for socket outlets, 1.5 mm² for lighting points, 4.0 mm² for water heater e.t.c. As well I learnt how to use the PVC conduits for conduit wiring for enhanced safety, connecting fluorescent tube lamp, choosing the appropriate protective devices (MCBs) for different circuits by calculating the load, performing the major tests on an installation before connecting it to the mains power supply including the polarity test, insulation resistance test, continuity test, earthing test and visual inspection. Finally I learnt how to use the energy meter to cost the energy consumed by consumers.
-                    </p>
-                </div>
 
+                </div>
+            </div>
+
+            <div id="projects" class="tab-content">
+                <h2 style="color: var(--primary)">Key Projects</h2>
+                <div class="glass-card">
+                    <h3>Automated Lighting Controller</h3>
+                    <p> Currently working on a Sensor-based system using BJT logic to reduce residential power waste.</p>
+                </div>
+            </div>
+
+            <div id="contact" class="tab-content">
+                <h2 style="color: var(--primary)">Contact & CV</h2>
+                <div class="glass-card">
+                    <p>📧 Email: samuelnyagaka98@gmail.com</p>
+                    <p>📞 Phone: +254 748588787</p>
+                    <p>📍 Location: Chuka / Nairobi, Kenya</p>
+                    <br>
+                    <a href="Samwel_CV.pdf" download class="btn">⬇️ Download CV (PDF)</a>
+                </div>
             </div>
         </div>
 
-        <div id="projects" class="tab-content">
-            <h2 style="color: var(--primary)">Key Projects</h2>
-            <div class="glass-card">
-                <h3>Automated Lighting Controller</h3>
-                <p> Currently working on a Sensor-based system using BJT logic to reduce residential power waste.</p>
-            </div>
-        </div>
-
-        <div id="contact" class="tab-content">
-            <h2 style="color: var(--primary)">Contact & CV</h2>
-            <div class="glass-card">
-                <p>📧 Email: samuelnyagaka98@gmail.com</p>
-                <p>📞 Phone: +254 748588787</p>
-                <p>📍 Location: Chuka / Nairobi, Kenya</p>
-                <br>
-                <a href="samwel_CV.pdf" download class="btn">⬇️ Download CV (PDF)</a>
-            </div>
-        </div>
+        <footer><p>&copy; 2025 Samwel Matunda Nyagaka</p></footer>
     </div>
-
-    <footer><p>&copy; 2025 Samwel Matunda Nyagaka</p></footer>
 
     <script>
+        // Toggle Logic for Options Sidebar
+        function toggleOptions() {
+            const container = document.getElementById("nav-links-container");
+            const arrow = document.getElementById("arrow");
+            
+            // Check current display state
+            if (container.style.display === "none") {
+                container.style.display = "flex"; // Show
+                arrow.style.transform = "rotate(0deg)"; // Reset arrow
+            } else {
+                container.style.display = "none"; // Hide
+                arrow.style.transform = "rotate(-90deg)"; // Rotate arrow to indicate closed
+            }
+        }
+
         // Tab switching logic
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;

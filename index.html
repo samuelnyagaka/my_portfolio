@@ -175,6 +175,16 @@
         .tab-content { display: none; }
         .active-content { display: block; animation: fadeInUp 0.6s ease forwards; }
 
+        /* Project Background Customization */
+        #contact{
+            background-image: linear-gradient(rgba(2, 6, 23, 0.8), rgba(2, 6, 23, 0.8)), url('background.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -201,6 +211,18 @@
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .mobile-media-trigger {
+            display: none;
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            cursor: pointer;
         }
 
         /* Gallery Grid */
@@ -316,6 +338,11 @@
             nav button:hover { padding-left: 15px; } 
             nav button.active::after { display: none; } 
             nav button.active { background: var(--primary); color: var(--bg); }
+
+            /* Mobile Media Hiding Logic */
+            .project-media { display: none; }
+            .mobile-media-trigger { display: inline-block; }
+            .show-media { display: flex !important; }
         }
     </style>
 </head>
@@ -414,9 +441,11 @@
                     <h3 style="color: var(--accent); margin-bottom: 10px;">1. Sequential Logic Display & Timing Circuit</h3>
                     
                     <p><strong>Project Overview:</strong><br>
-                    Designed and fabricated a 10-step sequential LED chaser to demonstrate fundamental digital logic and timing control. The circuit utilizes a clock pulse generator to drive a decade counter, creating a visually distinct "running light" effect often used in automotive indicators and safety displays.</p>
+                    Designed a 10-step sequential LED chaser to demonstrate fundamental digital logic and timing control. The circuit utilizes a clock pulse generator to drive a decade counter, creating a visually distinct "running light" effect often used in automotive indicators and safety displays.</p>
 
-                    <div class="project-media">
+                    <button class="mobile-media-trigger" onclick="toggleMobileMedia()">📸 Show Project Media</button>
+
+                    <div class="project-media" id="chaser-media">
                         <div class="media-box">
                             <img src="chaser.png" alt="LED Chaser Project Photo">
                             <p style="font-size: 0.7rem; padding: 5px; text-align: center; opacity: 0.7;">Project Hardware Setup (Used a breadboard)</p>
@@ -437,7 +466,7 @@
                             <strong style="color: var(--accent);">• Clock Generation (The Heart):</strong> Utilized a <strong>NE555 Timer IC</strong> configured in Astable Multivibrator Mode to generate a continuous stream of square-wave pulses.
                         </li>
                         <li style="margin-bottom: 12px;">
-                            <strong style="color: var(--accent);">• Frequency Control:</strong> Integrated a 10kΩ potentiometer in the timing network to allow for real-time adjustment of the pulse frequency (speed of the chase).
+                            <strong style="color: var(--accent);">• Frequency Control:</strong> Used resistors in the timing network to allow for real-time adjustment of the pulse frequency (speed of the chase) by using different values of resistance.
                         </li>
                         <li style="margin-bottom: 12px;">
                             <strong style="color: var(--accent);">• Sequential Logic (The Brain):</strong> Fed the clock signal into a <strong>CD4017 Decade Counter IC</strong>. This chip counts the incoming pulses and sequentially drives its 10 output pins (Q0-Q9) HIGH one by one.
@@ -447,7 +476,7 @@
                         </li>
                     </ul>
 
-                    <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">Skills Demonstrated</h4>
+                    <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">Skills Gained</h4>
                     <ul style="list-style-type: none; padding: 0; margin-top: 10px;">
                         <li style="margin-bottom: 8px;">✅ <strong>Circuit Analysis:</strong> Understanding datasheet pinouts for logic ICs (555 & 4017).</li>
                         <li style="margin-bottom: 8px;">✅ <strong>Signal Processing:</strong> Manipulating RC time constants to control frequency.</li>
@@ -498,6 +527,18 @@
             document.getElementById(tabName).classList.add("active-content");
             evt.currentTarget.classList.add("active");
             resetGallery(); 
+        }
+
+        // Mobile Media Toggle Logic
+        function toggleMobileMedia() {
+            const media = document.getElementById('chaser-media');
+            const btn = document.querySelector('.mobile-media-trigger');
+            media.classList.toggle('show-media');
+            if(media.classList.contains('show-media')) {
+                btn.innerText = "× Hide Project Media";
+            } else {
+                btn.innerText = "📸 Show Project Media";
+            }
         }
 
         // Image Viewer Logic
